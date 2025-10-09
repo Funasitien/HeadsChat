@@ -1,7 +1,7 @@
 package dev.funa.chatHeads;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -9,18 +9,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatListener implements Listener {
-    private final ChatHeads plugin;
-
-    public ChatListener(ChatHeads plugin) {
-        this.plugin = plugin;
-    }
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         event.setCancelled(true);
 
         // Get the message format from config
-        String s = plugin.chatMessage;
+        String s = ChatHeads.chatMessage;
         String[] parts = s.split("%head%");
         // Format before and after the head placeholder
         String before;
@@ -30,7 +25,12 @@ public class ChatListener implements Listener {
             after = event.getMessage();
         } else {
             before = parts[0].replace("%player%", event.getPlayer().getName()).replace("%message%", event.getMessage());
-            after = parts[1].replace("%player%", event.getPlayer().getName()).replace("%message%", event.getMessage());;
+            after =  parts[1].replace("%player%", event.getPlayer().getName()).replace("%message%", event.getMessage());
+        }
+
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            before = PlaceholderAPI.setPlaceholders(event.getPlayer(), before);
+            after = PlaceholderAPI.setPlaceholders(event.getPlayer(), after);
         }
 
         // Build the JSON string for the chat message
