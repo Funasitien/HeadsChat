@@ -1,0 +1,4 @@
+name: ChatHeads
+version: '1.0.0'
+main: dev.funa.chatHeads.ChatHeads
+api-version: '1.21'
