@@ -19,27 +19,28 @@ public class ChatListener implements Listener {
     public void onChat(AsyncPlayerChatEvent event) {
         event.setCancelled(true);
 
-        // Build the player head component (your new object)
+        // Get the message format from config
+        String s = plugin.chatMessage;
+        String[] parts = s.split("%head%");
+        // Format before and after the head placeholder
+        String before;
+        String after;
+        if (parts.length != 2) {
+            before = event.getPlayer().getName();
+            after = event.getMessage();
+        } else {
+            before = parts[0].replace("%player%", event.getPlayer().getName()).replace("%message%", event.getMessage());
+            after = parts[1].replace("%player%", event.getPlayer().getName()).replace("%message%", event.getMessage());;
+        }
+
+        // Build the JSON string for the chat message
         String json = """
-            {"type":"object","object":"player","player":{"name":"%player%"},"hat":true}
-            """.replace("%player%", event.getPlayer().getName());
-
-        Component head = GsonComponentSerializer.gson().deserialize(json);
-
-        // Build the username
-        Component name = Component.text(event.getPlayer().getName())
-                .color(NamedTextColor.WHITE);
-
-        // Build the actual chat message
-        Component message = Component.text(": " + event.getMessage())
-                .color(NamedTextColor.GRAY);
-
-        // Combine them → [Head][Name]: message
-        Component full = Component.empty()
-                .append(head)
-                .append(Component.space())
-                .append(name)
-                .append(message);
+                [{"text":"%before%"},{"type":"object","object":"player","player":{"name":"%player%"},"hat":true},{"text":"%after%"}]
+                """
+            .replace("%player%", event.getPlayer().getName())
+            .replace("%before%", before)
+            .replace("%after%", after);
+        Component full = GsonComponentSerializer.gson().deserialize(json);
 
         Bukkit.broadcast(full);
     }
