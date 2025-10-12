@@ -24,13 +24,13 @@ public class ChatListener implements Listener {
             before = event.getPlayer().getName();
             after = event.getMessage();
         } else {
-            before = parts[0].replace("%player%", event.getPlayer().getName()).replace("%message%", event.getMessage());
-            after =  parts[1].replace("%player%", event.getPlayer().getName()).replace("%message%", event.getMessage());
+            before = parts[0].replace("%player%", event.getPlayer().getName()).replace("%message%", event.getMessage()).replace("&", "§");
+            after =  parts[1].replace("%player%", event.getPlayer().getName()).replace("%message%", event.getMessage()).replace("&", "§");
         }
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            before = PlaceholderAPI.setPlaceholders(event.getPlayer(), before);
-            after = PlaceholderAPI.setPlaceholders(event.getPlayer(), after);
+            before = PlaceholderAPI.setPlaceholders(event.getPlayer(), before).replace("&", "§");
+            after = PlaceholderAPI.setPlaceholders(event.getPlayer(), after).replace("&", "§");
         }
 
         // Build the JSON string for the chat message

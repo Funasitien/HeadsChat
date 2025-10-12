@@ -14,8 +14,16 @@ public final class ChatHeads extends JavaPlugin {
         chatMessage = configManager.getConfig().getString("message", "§f<%head% %player%> §7%message%");
         getLogger().info("Custom chat loaded: " + chatMessage);
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
+        getLogger().info("Reload command loaded.");
+        this.getCommand("chatheadsreload").setExecutor(new ReloadCommand(this));
         getLogger().info("ChatHeads has been enabled!");
 
+    }
+
+    public void reloadConfigFile() {
+        reloadConfig();
+        chatMessage = getConfig().getString("message", "§f<%head% %player%> §7%message%");
+        getLogger().info("Configuration reloaded: " + chatMessage);
     }
 
     @Override
