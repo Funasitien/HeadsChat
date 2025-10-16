@@ -32,11 +32,21 @@ public class ConfigManager {
 
         config = YamlConfiguration.loadConfiguration(file);
         chatFormatString = config.getString("format.chat");
+        joinFormatString = config.getString("format.join");
+        leaveFormatString = config.getString("format.leave");
         plugin.getLogger().info("Config loaded!" + config.getString("message"));
     }
 
     public FileConfiguration getConfig() {
         return config;
+    }
+
+    public Boolean isJoinFormatingEnabled() {
+        return config.getBoolean("format.enable-join-formatting");
+    }
+
+    public Boolean isLeaveFormatingEnabled() {
+        return config.getBoolean("format.enable-leave-formatting");
     }
 
     public void saveConfig() {

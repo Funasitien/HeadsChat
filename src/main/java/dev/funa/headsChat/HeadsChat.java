@@ -2,6 +2,7 @@ package dev.funa.headsChat;
 
 import dev.funa.headsChat.commands.MainCommand;
 import dev.funa.headsChat.listeners.ChatListener;
+import dev.funa.headsChat.listeners.JoinLeaveListener;
 import dev.funa.headsChat.managers.ConfigManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -11,6 +12,8 @@ public final class HeadsChat extends JavaPlugin {
     private static ConfigManager configManager;
     // Adventure audiences for MiniMessage/component sending
     private BukkitAudiences adventure;
+    public static String prefix = "<#f6da71>ʜᴇᴀᴅѕᴄʜᴀᴛ</#f6da71> <gray>•</gray> ";
+    public static String version = "1.1.0";
 
     @Override
     public void onEnable() {
@@ -18,6 +21,7 @@ public final class HeadsChat extends JavaPlugin {
         configManager = new ConfigManager(this);
         configManager.setup();
         getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+        getServer().getPluginManager().registerEvents(new JoinLeaveListener(this), this);
         getLogger().info("Reload command loaded.");
         if (this.getCommand("headschat") != null) {
             this.getCommand("headschat").setExecutor(new MainCommand(this));

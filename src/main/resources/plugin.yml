@@ -1,5 +1,5 @@
 name: HeadsChat
-version: '1.0.3'
+version: '1.1.0'
 main: dev.funa.headsChat.HeadsChat
 api-version: '1.21'
 softdepend: ["PlaceholderAPI"]
