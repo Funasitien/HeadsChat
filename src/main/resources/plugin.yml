@@ -5,8 +5,8 @@ api-version: '1.21'
 softdepend: ["PlaceholderAPI"]
 
 commands:
-  headschatreload:
+  headschat:
     description: Reload the HeadsChat plugin configuration.
     usage: /headschatreload <subcommand>
-    permission: headschat.reload
+    permission: headschat.command
     permission-message: You don't have permission to use this command!

@@ -1,1 +1,7 @@
-message: "§f<%head% %player%> §7%message%"
+#
+
+format:
+  chat: "§f<%head% %player%> §7%message%"
+
+# CHanging this little guy will break everything. Do not change it. Promise?
+config-version: 1

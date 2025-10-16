@@ -1,5 +1,6 @@
-package dev.funa.headsChat;
+package dev.funa.headsChat.listeners;
 
+import dev.funa.headsChat.HeadsChat;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -9,13 +10,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatListener implements Listener {
+    private final HeadsChat plugin;
+
+    public ChatListener(HeadsChat plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         event.setCancelled(true);
 
         // Get the message format from config
-        String s = HeadsChat.chatMessage;
+        String s = plugin.getConfigManager().chatFormatString;
         String[] parts = s.split("%head%");
         // Format before and after the head placeholder
         String before;

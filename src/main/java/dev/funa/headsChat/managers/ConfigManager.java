@@ -1,5 +1,6 @@
-package dev.funa.headsChat;
+package dev.funa.headsChat.managers;
 
+import dev.funa.headsChat.HeadsChat;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -9,6 +10,10 @@ import java.io.IOException;
 public class ConfigManager {
     private final HeadsChat plugin;
     private FileConfiguration config;
+
+    public String chatFormatString;
+    public String joinFormatString;
+    public String leaveFormatString;
 
     public ConfigManager(HeadsChat plugin) {
         this.plugin = plugin;
@@ -26,6 +31,7 @@ public class ConfigManager {
         }
 
         config = YamlConfiguration.loadConfiguration(file);
+        chatFormatString = config.getString("format.chat");
         plugin.getLogger().info("Config loaded!" + config.getString("message"));
     }
 

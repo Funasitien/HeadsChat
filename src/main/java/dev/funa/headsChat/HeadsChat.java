@@ -1,33 +1,54 @@
 package dev.funa.headsChat;
 
+import dev.funa.headsChat.commands.MainCommand;
+import dev.funa.headsChat.listeners.ChatListener;
+import dev.funa.headsChat.managers.ConfigManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 
 public final class HeadsChat extends JavaPlugin {
 
-    public static String chatMessage;
+    private static ConfigManager configManager;
+    // Adventure audiences for MiniMessage/component sending
+    private BukkitAudiences adventure;
 
     @Override
     public void onEnable() {
         getLogger().info("Loading config...");
-        ConfigManager configManager = new ConfigManager(this);
+        configManager = new ConfigManager(this);
         configManager.setup();
-        chatMessage = configManager.getConfig().getString("message", "§f<%head% %player%> §7%message%");
-        getLogger().info("Custom chat loaded: " + chatMessage);
-        getServer().getPluginManager().registerEvents(new ChatListener(), this);
+        getServer().getPluginManager().registerEvents(new ChatListener(this), this);
         getLogger().info("Reload command loaded.");
-        this.getCommand("headschatreload").setExecutor(new ReloadCommand(this));
+        if (this.getCommand("headschat") != null) {
+            this.getCommand("headschat").setExecutor(new MainCommand(this));
+        } else {
+            getLogger().warning("Command 'headschat' is not defined in plugin.yml");
+        }
+        // Initialize Adventure audiences
+        adventure = BukkitAudiences.create(this);
         getLogger().info("HeadsChat has been enabled!");
 
     }
 
     public void reloadConfigFile() {
         reloadConfig();
-        chatMessage = getConfig().getString("message", "§f<%head% %player%> §7%message%");
-        getLogger().info("Configuration reloaded: " + chatMessage);
+        getLogger().info("Configuration reloaded!");
+    }
+
+    public ConfigManager getConfigManager() {
+        return configManager;
+    }
+
+    public BukkitAudiences getAdventure() {
+        return adventure;
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        if (adventure != null) {
+            adventure.close();
+            adventure = null;
+        }
     }
 }
