@@ -1,12 +1,12 @@
-name: ChatHeads
+name: HeadsChat
 version: '1.0.3'
-main: dev.funa.chatHeads.ChatHeads
+main: dev.funa.headsChat.HeadsChat
 api-version: '1.21'
 softdepend: ["PlaceholderAPI"]
 
 commands:
-  chatheadsreload:
-    description: Reload the ChatHeads plugin configuration.
-    usage: /chatheadsreload <subcommand>
-    permission: chatheads.reload
+  headschatreload:
+    description: Reload the HeadsChat plugin configuration.
+    usage: /headschatreload <subcommand>
+    permission: headschat.reload
     permission-message: You don't have permission to use this command!

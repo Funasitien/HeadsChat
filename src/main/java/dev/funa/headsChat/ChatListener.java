@@ -1,4 +1,4 @@
-package dev.funa.chatHeads;
+package dev.funa.headsChat;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
@@ -15,7 +15,7 @@ public class ChatListener implements Listener {
         event.setCancelled(true);
 
         // Get the message format from config
-        String s = ChatHeads.chatMessage;
+        String s = HeadsChat.chatMessage;
         String[] parts = s.split("%head%");
         // Format before and after the head placeholder
         String before;

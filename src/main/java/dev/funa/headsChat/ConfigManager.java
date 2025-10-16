@@ -1,4 +1,4 @@
-package dev.funa.chatHeads;
+package dev.funa.headsChat;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -7,10 +7,10 @@ import java.io.File;
 import java.io.IOException;
 
 public class ConfigManager {
-    private final ChatHeads plugin;
+    private final HeadsChat plugin;
     private FileConfiguration config;
 
-    public ConfigManager(ChatHeads plugin) {
+    public ConfigManager(HeadsChat plugin) {
         this.plugin = plugin;
     }
 
