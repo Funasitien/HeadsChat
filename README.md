@@ -1,2 +1,2 @@
-# ChatHeads
+# HeadsChat
  

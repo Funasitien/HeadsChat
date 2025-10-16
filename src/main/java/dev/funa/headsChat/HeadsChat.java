@@ -1,8 +1,8 @@
-package dev.funa.chatHeads;
+package dev.funa.headsChat;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class ChatHeads extends JavaPlugin {
+public final class HeadsChat extends JavaPlugin {
 
     public static String chatMessage;
 
@@ -15,8 +15,8 @@ public final class ChatHeads extends JavaPlugin {
         getLogger().info("Custom chat loaded: " + chatMessage);
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
         getLogger().info("Reload command loaded.");
-        this.getCommand("chatheadsreload").setExecutor(new ReloadCommand(this));
-        getLogger().info("ChatHeads has been enabled!");
+        this.getCommand("headschatreload").setExecutor(new ReloadCommand(this));
+        getLogger().info("HeadsChat has been enabled!");
 
     }
 
