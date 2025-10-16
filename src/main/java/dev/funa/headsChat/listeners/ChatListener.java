@@ -39,6 +39,9 @@ public class ChatListener implements Listener {
             after = PlaceholderAPI.setPlaceholders(event.getPlayer(), after).replace("&", "§");
         }
 
+        before = applyColorPermissions(player, before);
+        after = applyColorPermissions(player, after);
+
         // Build the JSON string for the chat message
         String json = """
                 [{"text":"%before%"},{"type":"object","object":"player","player":{"name":"%player%"},"hat":true},{"text":"%after%"}]
@@ -49,5 +52,22 @@ public class ChatListener implements Listener {
         Component full = GsonComponentSerializer.gson().deserialize(json);
 
         Bukkit.broadcast(full);
+    }
+
+    private String applyColorPermissions(Player player, String input) {
+        Matcher matcher = COLOR_PATTERN.matcher(input);
+        StringBuffer sb = new StringBuffer();
+
+        while (matcher.find()) {
+            char code = Character.toLowerCase(matcher.group(1).charAt(0));
+            if (ChatColorPermission.canUse(player, code)) {
+                matcher.appendReplacement(sb, "§" + code);
+            } else {
+                matcher.appendReplacement(sb, ""); // remove unauthorized color
+            }
+        }
+
+        matcher.appendTail(sb);
+        return sb.toString();
     }
 }
