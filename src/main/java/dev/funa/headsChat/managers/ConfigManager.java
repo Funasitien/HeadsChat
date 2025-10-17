@@ -1,6 +1,7 @@
 package dev.funa.headsChat.managers;
 
 import dev.funa.headsChat.HeadsChat;
+import dev.funa.headsChat.managers.configs.V2Migrator;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -9,6 +10,7 @@ import java.io.IOException;
 
 public class ConfigManager {
     private final HeadsChat plugin;
+    public static int version = 2;
     private FileConfiguration config;
 
     public String chatFormatString;
@@ -31,10 +33,20 @@ public class ConfigManager {
         }
 
         config = YamlConfiguration.loadConfiguration(file);
+
+        if (config.getInt("config-version", version) < 2) {
+            plugin.getLogger().info("Old config version detected, migrating to v2...");
+            // Perform migration steps here if needed
+            V2Migrator.migrate(config);
+            config.set("config-version", version);
+            saveConfig();
+            plugin.getLogger().info("Config migration complete.");
+        }
+
         chatFormatString = config.getString("format.chat");
         joinFormatString = config.getString("format.join");
         leaveFormatString = config.getString("format.leave");
-        plugin.getLogger().info("Config loaded!" + config.getString("message"));
+        plugin.getLogger().info("Config loaded!" + chatFormatString);
     }
 
     public FileConfiguration getConfig() {
@@ -42,12 +54,14 @@ public class ConfigManager {
     }
 
     public Boolean isJoinFormatingEnabled() {
-        return config.getBoolean("format.enable-join-formatting");
+        return config.getBoolean("join.enabled");
     }
 
     public Boolean isLeaveFormatingEnabled() {
-        return config.getBoolean("format.enable-leave-formatting");
+        return config.getBoolean("leave.enabled");
     }
+
+    public Boolean logMessages() { return config.getBoolean("chat.logging"); }
 
     public void saveConfig() {
         try {

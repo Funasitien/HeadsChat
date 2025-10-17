@@ -1,10 +1,8 @@
-"""
-░  ░░░░  ░░        ░░░      ░░░       ░░░░      ░░░░      ░░░  ░░░░  ░░░      ░░░        ░
-▒  ▒▒▒▒  ▒▒  ▒▒▒▒▒▒▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒▒▒▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒
-▓        ▓▓      ▓▓▓▓  ▓▓▓▓  ▓▓  ▓▓▓▓  ▓▓▓      ▓▓▓  ▓▓▓▓▓▓▓▓        ▓▓  ▓▓▓▓  ▓▓▓▓▓  ▓▓▓▓
-█  ████  ██  ████████        ██  ████  ████████  ██  ████  ██  ████  ██        █████  ████
-█  ████  ██        ██  ████  ██       ████      ████      ███  ████  ██  ████  █████  ████
-"""
+#░  ░░░░  ░░        ░░░      ░░░       ░░░░      ░░░░      ░░░  ░░░░  ░░░      ░░░        ░
+#▒  ▒▒▒▒  ▒▒  ▒▒▒▒▒▒▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒▒▒▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒  ▒▒  ▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒
+#▓        ▓▓      ▓▓▓▓  ▓▓▓▓  ▓▓  ▓▓▓▓  ▓▓▓      ▓▓▓  ▓▓▓▓▓▓▓▓        ▓▓  ▓▓▓▓  ▓▓▓▓▓  ▓▓▓▓
+#█  ████  ██  ████████        ██  ████  ████████  ██  ████  ██  ████  ██        █████  ████
+#█  ████  ██        ██  ████  ██       ████      ████      ███  ████  ██  ████  █████  ████
 
 # This is the main configuration file for the plugin.
 # You can customize the join, leave, and chat messages here.
@@ -16,13 +14,18 @@
 # {message} - The chat message (only for chat format)
 # Color codes are supported using the § symbol followed by a color code (e.g., §a for green).
 
-format:
-  join: "§e{head} {player} §7has joined the game"
-  leave: "§e{head} {player} §7has left the game"
-  chat: "§f<{head} {player}> §7{message}"
+chat:
+  enabled: true
+  logging: true
+  format: "<white>{head} {player}: <gray>{message}"
 
-  enable-join-formatting: true
-  enable-leave-formatting: true
+join:
+  enabled: true
+  format: "<yellow>{head} {player} joined the server"
 
-# CHanging this little guy will break everything. Do not change it. Promise?
-config-version: 1
+leave:
+  enabled: true
+  format: "<yellow>{head} {player} has left the server"
+
+# Changing this little guy will break everything. Do not change it. Promise?
+config-version: 2

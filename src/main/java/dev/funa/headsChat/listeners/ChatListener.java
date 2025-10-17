@@ -6,6 +6,7 @@ import dev.funa.headsChat.utils.StringOps;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -51,13 +52,22 @@ public class ChatListener implements Listener {
             .replace("{player}", event.getPlayer().getName())
             .replace("{before}", before)
             .replace("{after}", after);
+
         Component full = GsonComponentSerializer.gson().deserialize(json);
-        Bukkit.broadcast(full);
+
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (!p.hasPermission("headschat.muted")) {
+                p.sendMessage(full);
+            }
+        }
+        if (plugin.getConfigManager().logMessages()) {
+            plugin.getLogger().info(player.getName() + ": " + event.getMessage());
+        }
     }
 
     private String applyColorPermissions(Player player, String input) {
         Matcher matcher = COLOR_PATTERN.matcher(input);
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         while (matcher.find()) {
             char code = Character.toLowerCase(matcher.group(1).charAt(0));

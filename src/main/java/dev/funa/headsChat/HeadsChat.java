@@ -4,6 +4,7 @@ import dev.funa.headsChat.commands.MainCommand;
 import dev.funa.headsChat.listeners.ChatListener;
 import dev.funa.headsChat.listeners.JoinLeaveListener;
 import dev.funa.headsChat.managers.ConfigManager;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.plugin.java.JavaPlugin;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 
@@ -13,7 +14,7 @@ public final class HeadsChat extends JavaPlugin {
     // Adventure audiences for MiniMessage/component sending
     private BukkitAudiences adventure;
     public static String prefix = "<#f6da71>ʜᴇᴀᴅѕᴄʜᴀᴛ</#f6da71> <gray>•</gray> ";
-    public static String version = "1.1.0";
+    public static String version = "1.1.1";
 
     @Override
     public void onEnable() {
@@ -22,14 +23,13 @@ public final class HeadsChat extends JavaPlugin {
         configManager.setup();
         getServer().getPluginManager().registerEvents(new ChatListener(this), this);
         getServer().getPluginManager().registerEvents(new JoinLeaveListener(this), this);
-        getLogger().info("Reload command loaded.");
+        getLogger().info("Listeners loaded.");
         if (this.getCommand("headschat") != null) {
             this.getCommand("headschat").setExecutor(new MainCommand(this));
         } else {
             getLogger().warning("Command 'headschat' is not defined in plugin.yml");
         }
-        // Initialize Adventure audiences
-        adventure = BukkitAudiences.create(this);
+        getLogger().info("Reload command loaded.");
         getLogger().info("HeadsChat has been enabled!");
 
     }
