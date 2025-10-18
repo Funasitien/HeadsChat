@@ -11,8 +11,8 @@ import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 public final class HeadsChat extends JavaPlugin {
 
     private static ConfigManager configManager;
-    // Adventure audiences for MiniMessage/component sending
     private BukkitAudiences adventure;
+    private MiniMessage mm = MiniMessage.miniMessage();
     public static String prefix = "<#f6da71>ʜᴇᴀᴅѕᴄʜᴀᴛ</#f6da71> <gray>•</gray> ";
     public static String version = "1.1.1";
 
@@ -41,6 +41,10 @@ public final class HeadsChat extends JavaPlugin {
 
     public ConfigManager getConfigManager() {
         return configManager;
+    }
+
+    public BukkitAudiences getMiniMessage() {
+        return mm;
     }
 
     public BukkitAudiences getAdventure() {
