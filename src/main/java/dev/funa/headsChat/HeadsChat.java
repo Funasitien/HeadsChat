@@ -14,7 +14,7 @@ public final class HeadsChat extends JavaPlugin {
     private BukkitAudiences adventure;
     private MiniMessage mm = MiniMessage.miniMessage();
     public static String prefix = "<#f6da71>ʜᴇᴀᴅѕᴄʜᴀᴛ</#f6da71> <gray>•</gray> ";
-    public static String version = "1.1.1";
+    public static String version = "1.2.0";
 
     @Override
     public void onEnable() {
@@ -43,7 +43,7 @@ public final class HeadsChat extends JavaPlugin {
         return configManager;
     }
 
-    public BukkitAudiences getMiniMessage() {
+    public MiniMessage getMiniMessage() {
         return mm;
     }
 
