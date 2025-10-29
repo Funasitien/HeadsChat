@@ -14,5 +14,7 @@ public class V2Migrator {
 
         YAML.createKeyIfNotExists(config, "chat.enabled", true);
         YAML.createKeyIfNotExists(config, "chat.logging", true);
+
+        YAML.removeYamlKey(config, "format");
     }
 }

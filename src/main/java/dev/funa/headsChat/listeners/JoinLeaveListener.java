@@ -2,11 +2,7 @@ package dev.funa.headsChat.listeners;
 
 import dev.funa.headsChat.HeadsChat;
 import dev.funa.headsChat.utils.Formatter;
-import dev.funa.headsChat.utils.StringOps;
-import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,6 +19,12 @@ public class JoinLeaveListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
+        if (plugin.getConfigManager().isRenameEnabled()) {
+            Player p = event.getPlayer();
+            Component customName = plugin.mainCommandExecutor.getCustomName(p);
+            p.displayName(customName);
+            p.playerListName(customName);
+        }
         if (plugin.getConfigManager().isJoinFormatingEnabled()) {
             event.setJoinMessage(null);
 

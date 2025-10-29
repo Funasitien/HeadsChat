@@ -29,4 +29,8 @@ public class YAML {
             config.set(path, defaultValue);
         }
     }
+
+    public static void removeYamlKey(FileConfiguration config, String format) {
+        config.set(format, null);
+    }
 }

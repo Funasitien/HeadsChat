@@ -1,5 +1,5 @@
 name: HeadsChat
-version: '1.2.0'
+version: '1.2.1'
 main: dev.funa.headsChat.HeadsChat
 api-version: '1.21'
 softdepend: ["PlaceholderAPI"]
@@ -9,4 +9,10 @@ commands:
     description: Reload the HeadsChat plugin configuration.
     usage: /headschatreload <subcommand>
     permission: headschat.command
+    permission-message: You don't have permission to use this command!
+  msg:
+    description: Send a private message to another player.
+    usage: /<command> [player] <message>
+    aliases: [dm, tell, whisper]
+    permission: headschat.msg
     permission-message: You don't have permission to use this command!

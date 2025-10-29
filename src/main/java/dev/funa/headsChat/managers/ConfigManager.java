@@ -2,20 +2,23 @@ package dev.funa.headsChat.managers;
 
 import dev.funa.headsChat.HeadsChat;
 import dev.funa.headsChat.managers.configs.V2Migrator;
+import dev.funa.headsChat.managers.configs.VXMigrator;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 
 public class ConfigManager {
     private final HeadsChat plugin;
-    public static int version = 2;
+    public static int version = 3;
     private FileConfiguration config;
 
     public String chatFormatString;
     public String joinFormatString;
     public String leaveFormatString;
+    public String dmFormatString;
 
     public ConfigManager(HeadsChat plugin) {
         this.plugin = plugin;
@@ -34,18 +37,19 @@ public class ConfigManager {
 
         config = YamlConfiguration.loadConfiguration(file);
 
-        if (config.getInt("config-version", version) < 2) {
-            plugin.getLogger().info("Old config version detected, migrating to v2...");
-            // Perform migration steps here if needed
-            V2Migrator.migrate(config);
-            config.set("config-version", version);
+        for (int i = config.getInt("config-version", 1); i < version; i++) {
+            plugin.getLogger().info("Migrating config " +
+                    "from v" + i + " to v" + (i + 1) + "...");
+            VXMigrator.migrate(i + 1, config);
+            config.set("config-version", i + 1);
+            plugin.getLogger().info("Config migration to "+ (i + 1) +" complete.");
             saveConfig();
-            plugin.getLogger().info("Config migration complete.");
         }
 
-        chatFormatString = config.getString("format.chat");
-        joinFormatString = config.getString("format.join");
-        leaveFormatString = config.getString("format.leave");
+        chatFormatString = config.getString("chat.format");
+        joinFormatString = config.getString("join.format");
+        leaveFormatString = config.getString("leave.format");
+        dmFormatString  = config.getString("dm.format");
         plugin.getLogger().info("Config loaded!" + chatFormatString);
     }
 
@@ -63,6 +67,17 @@ public class ConfigManager {
 
     public Boolean logMessages() { return config.getBoolean("chat.logging"); }
 
+    public int getCooldownSeconds() { return config.getInt("chat.cooldown", 0);}
+    public String getCooldownMessage() { return config.getString("chat.cooldown-message","<red>You are on cooldown for {seconds} more seconds.");}
+    public String getCooldownPermission() { return config.getString("chat.cooldown-bypass-permission","headschat.bypass.cooldown");}
+
+    public String getRenameDialogName() { return config.getString("nick.dialog.name", "Change your Display Name");}
+    public String getRenameDialogConfirm() { return config.getString("nick.dialog.confirm", "Confirm");}
+    public String getRenameDialogCancel() { return config.getString("nick.dialog.cancel", "Cancel");}
+    public String getRenameDialogPrompt() { return config.getString("nick.dialog.prompt", "Choose a new name");}
+    public String getRenameDialogCancelTooltip() { return config.getString("nick.dialog.cancel-tooltip", "Click to cancel changing your display name");}
+    public String getRenameDialogConfirmTooltip() { return config.getString("nick.dialog.confirm-tooltip", "Click to confirm your new display name");}
+
     public void saveConfig() {
         try {
             config.save(new File(plugin.getDataFolder(), "config.yml"));
@@ -73,5 +88,9 @@ public class ConfigManager {
 
     public void reloadConfig() {
         config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "config.yml"));
+    }
+
+    public boolean isRenameEnabled() {
+        return config.getBoolean("nick.enabled", true);
     }
 }

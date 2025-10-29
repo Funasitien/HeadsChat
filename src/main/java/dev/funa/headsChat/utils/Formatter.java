@@ -13,7 +13,8 @@ public class Formatter {
                     PlaceholderAPI.setPlaceholders(player,
                             text
                                     .replace("&", "§")
-                                    .replace("{player}", player.getName())
+                                    .replace("{player}",
+                                            player.getPlayerListName())
                                     .replace("{head}", "<head:" + player.getName() + ">")
                     )
             );
@@ -21,7 +22,8 @@ public class Formatter {
             return plugin.getMiniMessage().deserialize(
                     text
                             .replace("&", "§")
-                            .replace("{player}", player.getName())
+                            .replace("{player}",
+                                    player.getPlayerListName())
                             .replace("{head}", "<head:" + player.getName() + ">")
             );
         }
