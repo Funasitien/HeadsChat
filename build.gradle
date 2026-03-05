@@ -1,9 +1,10 @@
 plugins {
     id 'java'
+    id("com.gradleup.shadow") version "9.3.0"
 }
 
 group = 'dev.funa'
-version = '1.2.2'
+version = '1.3.2'
 
 repositories {
     mavenCentral()
@@ -14,11 +15,17 @@ repositories {
     maven {
         url = 'https://repo.extendedclip.com/releases/'
     }
+    maven {
+        name "thenextlvlReleases"
+        url "https://repo.thenextlvl.net/releases"
+    }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.9-R0.1-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.11.6")
+
+    implementation "dev.faststats.metrics:bukkit:0.17.2"
 
     implementation("net.kyori:adventure-api:4.25.0")
     implementation("net.kyori:adventure-text-minimessage:4.25.0")
@@ -41,6 +48,23 @@ tasks.withType(JavaCompile).configureEach {
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         options.release.set(targetJavaVersion)
     }
+}
+
+tasks.shadowJar {
+    relocate("dev.faststats", "dev.funa.libs.faststats")
+
+    // Make the Shadow JAR be the main output: HeadsChat-<version>.jar (no "-all" classifier)
+    archiveClassifier.set("")
+}
+
+// Disable the plain jar task so you only get the shaded artifact
+tasks.jar {
+    enabled = false
+}
+
+// Ensure `build`/`assemble` produce the Shadow JAR
+tasks.assemble {
+    dependsOn(tasks.shadowJar)
 }
 
 processResources {
