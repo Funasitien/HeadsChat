@@ -39,8 +39,6 @@ public final class HeadsChat extends JavaPlugin {
     private final BukkitMetrics metrics = BukkitMetrics.factory()
             .token("3f2a9c0fb3d4136a6c9fb3a112e969a8")
 
-            .url(URI.create("https://faststats.myserver.com/v1/collect"))
-
             .errorTracker(ERROR_TRACKER)
 
             .create(this);
