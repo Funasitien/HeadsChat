@@ -15,19 +15,19 @@ public class HeadExtension extends PlaceholderExpansion {
     @Override
     @NotNull
     public String getAuthor() {
-        return String.join(", ", plugin.getDescription().getAuthors()); //
+        return String.join(", ", plugin.getPluginMeta().getAuthors()); //
     }
 
     @Override
     @NotNull
     public String getIdentifier() {
-        return "example";
+        return "hc";
     }
 
     @Override
     @NotNull
     public String getVersion() {
-        return plugin.getDescription().getVersion(); //
+        return plugin.getPluginMeta().getVersion(); //
     }
 
     @Override
@@ -38,9 +38,9 @@ public class HeadExtension extends PlaceholderExpansion {
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String params) {
         if (params.equalsIgnoreCase("head")) {
-            return plugin.getConfig().getString("placeholders.placeholder1", "default1"); //
+            return plugin.getConfig().getString("<head:" + player.getName() + ">", "<head:MHF_Steve>"); //
         }
 
-        return "<head:"; //
+        return "<head:MHF_Steve>"; //
     }
 }

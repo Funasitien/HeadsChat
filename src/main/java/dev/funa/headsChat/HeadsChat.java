@@ -33,7 +33,7 @@ public final class HeadsChat extends JavaPlugin {
     public static final ErrorTracker ERROR_TRACKER = ErrorTracker.contextAware();
     private MiniMessage mm = MiniMessage.miniMessage();
     public static String prefix = "<#f6da71>ʜᴇᴀᴅѕᴄʜᴀᴛ</#f6da71> <gray>•</gray> ";
-    public static String version = "1.3.3";
+    public static String version = "1.3.4";
     public MainCommand mainCommandExecutor;
 
     private final BukkitMetrics metrics = BukkitMetrics.factory()
