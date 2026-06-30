@@ -1,6 +1,8 @@
 package dev.funa.headsChat.utils;
 
 import dev.funa.headsChat.HeadsChat;
+import dev.funa.headsChat.integration.FloodgateHook;
+import dev.funa.headsChat.integration.VaultHook;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -16,9 +18,16 @@ public class Formatter {
         String prepared = text
                 .replace("&", "§")
                 .replace("{player}", player.getPlayerListName())
-                .replace("{head}", "<head:" + player.getName() + ">");
+                .replace("{prefix}", VaultHook.getPrefix(player))
+                .replace("{suffix}", VaultHook.getSuffix(player));
 
-        if (message != null) {
+        if (plugin.isFloodgateEnabled()) {
+            prepared = FloodgateHook.parse(prepared, player, plugin.getConfigManager().getBedrockCharFallback());
+        } else {
+            prepared = prepared.replace("{head}", "<head:" + player.getName() + ">");
+        }
+
+            if (message != null) {
             prepared = prepared.replace("{message}", message);
         }
 

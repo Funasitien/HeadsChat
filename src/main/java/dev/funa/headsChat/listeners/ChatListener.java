@@ -33,6 +33,11 @@ public class ChatListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChat(AsyncChatEvent event) {
         Player sender = event.getPlayer();
+        if (sender.hasPermission("headschat.muted") && !sender.isOp()) {
+            event.setCancelled(true);
+            sender.sendMessage(HeadsChat.prefix + "You have been muted. You will not be able to send messages.");
+            return;
+        }
         UUID uuid = sender.getUniqueId();
 
         long now = System.currentTimeMillis();
@@ -68,7 +73,7 @@ public class ChatListener implements Listener {
 
             // Optional ping sound (per-viewer). Renderer can be called async -> schedule sync for sounds.
             if (viewer instanceof Player target) {
-                if (!target.hasPermission("headschat.muted") || target.isOp()) {
+                if (!target.hasPermission("headschat.hidden") || target.isOp()) {
                     if (plainMessage.contains(target.getName())) {
                         Bukkit.getScheduler().runTask(plugin, () ->
                                 target.playSound(target.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1)
@@ -85,20 +90,4 @@ public class ChatListener implements Listener {
         }
     }
 
-    private String applyColorPermissions(Player player, String input) {
-        Matcher matcher = COLOR_PATTERN.matcher(input);
-        StringBuilder sb = new StringBuilder();
-
-        while (matcher.find()) {
-            char code = Character.toLowerCase(matcher.group(1).charAt(0));
-            if (ChatColorPermission.canUse(player, code)) {
-                matcher.appendReplacement(sb, "§" + code);
-            } else {
-                matcher.appendReplacement(sb, "");
-            }
-        }
-
-        matcher.appendTail(sb);
-        return sb.toString();
-    }
 }

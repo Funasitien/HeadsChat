@@ -70,6 +70,9 @@ public class MessageCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] strings) {
-        return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
+        if (strings.length == 1) {
+            return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
+        }
+        return List.of("<Message>");
     }
 }

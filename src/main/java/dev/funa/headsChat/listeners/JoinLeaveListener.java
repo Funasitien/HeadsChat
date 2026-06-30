@@ -19,9 +19,9 @@ public class JoinLeaveListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
+        Player p = event.getPlayer();
         if (plugin.getConfigManager().isRenameEnabled()) {
-            Player p = event.getPlayer();
-            Component customName = plugin.mainCommandExecutor.getCustomName(p);
+            Component customName = plugin.renameCommandExecutor.getCustomName(p);
             p.displayName(customName);
             p.playerListName(customName);
         }
@@ -34,11 +34,18 @@ public class JoinLeaveListener implements Listener {
                     plugin
             );
 
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                if (!p.hasPermission("headschat.muted")) {
-                    p.sendMessage(full);
-                }
+            for (Player pl : Bukkit.getOnlinePlayers()) {
+                if (pl.hasPermission("headschat.hidden")) continue;
+                pl.sendMessage(full);
             }
+        }
+
+        if (p.isOp()) {
+            if (plugin.update) {
+                p.sendMessage(HeadsChat.prefix + "A new update is available! Download it here: https://modrinth.com/plugin/headschat/");
+            }
+        } else if (p.hasPermission("headschat.muted")) {
+            p.sendMessage(HeadsChat.prefix + "You have been muted. You will not be able to send messages.");
         }
     }
 

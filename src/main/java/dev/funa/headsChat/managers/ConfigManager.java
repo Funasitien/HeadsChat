@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class ConfigManager {
     private final HeadsChat plugin;
@@ -19,6 +20,8 @@ public class ConfigManager {
     public String joinFormatString;
     public String leaveFormatString;
     public String dmFormatString;
+    public String bedrockFallbackString;
+    public List<String> motdFormatString;
 
     public ConfigManager(HeadsChat plugin) {
         this.plugin = plugin;
@@ -49,7 +52,10 @@ public class ConfigManager {
         chatFormatString = config.getString("chat.format");
         joinFormatString = config.getString("join.format");
         leaveFormatString = config.getString("leave.format");
-        dmFormatString  = config.getString("dm.format");
+        dmFormatString = config.getString("dm.format");
+        motdFormatString = config.getStringList("motd.message");
+        bedrockFallbackString = config.getString("bedrock.fallback", "");
+
         plugin.getLogger().info("Config loaded!" + chatFormatString);
     }
 
@@ -78,6 +84,14 @@ public class ConfigManager {
     public String getRenameDialogCancelTooltip() { return config.getString("nick.dialog.cancel-tooltip", "Click to cancel changing your display name");}
     public String getRenameDialogConfirmTooltip() { return config.getString("nick.dialog.confirm-tooltip", "Click to confirm your new display name");}
 
+    public boolean isMotdEnabled() {
+        return config.getBoolean("motd.enabled", false);
+    }
+
+    public List<String> getMotdFormat() {
+        return config.getStringList("motd.message");
+    }
+
     public void saveConfig() {
         try {
             config.save(new File(plugin.getDataFolder(), "config.yml"));
@@ -88,9 +102,19 @@ public class ConfigManager {
 
     public void reloadConfig() {
         config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "config.yml"));
+        chatFormatString = config.getString("chat.format");
+        joinFormatString = config.getString("join.format");
+        leaveFormatString = config.getString("leave.format");
+        dmFormatString = config.getString("dm.format");
+        motdFormatString = config.getStringList("motd.message");
+        bedrockFallbackString = config.getString("bedrock.fallback", "");
     }
 
     public boolean isRenameEnabled() {
         return config.getBoolean("nick.enabled", true);
+    }
+
+    public String  getBedrockCharFallback() {
+        return bedrockFallbackString;
     }
 }

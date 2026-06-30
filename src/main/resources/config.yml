@@ -18,12 +18,12 @@
 # Color codes are supported using the § symbol followed by a color code (e.g., §a for green).
 
 # Changing this little guy will break everything. Do not change it. Promise?
-config-version: 3
+config-version: 4
 
 chat:
   enabled: true
   logging: true
-  format: "<white>{head} {player}: <gray>{message}"
+  format: "<white>{head} {prefix} {player} {suffix}: <gray>{message}"
   cooldown: 0
   cooldown-message: "<red>You are sending messages too quickly! Please wait {time} seconds."
   cooldown-bypass-permission: "headschat.bypass.cooldown"
@@ -49,3 +49,12 @@ join:
 leave:
   enabled: true
   format: "<yellow>{head} {player} has left the server"
+
+motd:
+  enabled: true
+  message:
+    - "<white>Welcome to the server {head} {player}!"
+    - "<gray>Have fun!"
+
+bedrock:
+  fallback: "x"

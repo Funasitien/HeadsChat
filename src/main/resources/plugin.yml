@@ -1,15 +1,21 @@
 name: HeadsChat
-version: '1.3.4'
+version: '${version}'
 main: dev.funa.headsChat.HeadsChat
 api-version: '1.21.9'
 folia-supported: true
-softdepend: ["PlaceholderAPI"]
+softdepend: ["PlaceholderAPI", "SkinsRestorer", "Vault", "Floodgate"]
 
 commands:
   headschat:
     description: Reload the HeadsChat plugin configuration.
     usage: /headschatreload <subcommand>
     permission: headschat.command
+    permission-message: You don't have permission to use this command!
+  rename:
+    description: Change your display name.
+    usage: /<command> [name]
+    aliases: [nick]
+    permission: headschat.rename
     permission-message: You don't have permission to use this command!
   msg:
     description: Send a private message to another player.
