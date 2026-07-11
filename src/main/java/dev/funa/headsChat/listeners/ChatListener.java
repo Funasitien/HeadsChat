@@ -6,9 +6,9 @@ import dev.funa.headsChat.utils.Formatter;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Bukkit;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -32,6 +32,9 @@ public class ChatListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onChat(AsyncChatEvent event) {
+        if (!plugin.getConfigManager().getConfig().getBoolean("chat.enabled")) {
+            return;
+        }
         Player sender = event.getPlayer();
         if (sender.hasPermission("headschat.muted") && !sender.isOp()) {
             event.setCancelled(true);
@@ -61,27 +64,32 @@ public class ChatListener implements Listener {
         lastMessageTimestamps.put(uuid, now);
 
         event.renderer((source, sourceDisplayName, message, viewer) -> {
-            // {message} as plain text (what player typed)
             String plainMessage = PlainTextComponentSerializer.plainText().serialize(message);
 
+            // Cast viewer to Player safely. If it's the console, it becomes null.
+            Player viewerPlayer = viewer instanceof Player target ? target : null;
+
+            // Pass the viewerPlayer into your formatter
             Component rendered = Formatter.parseText(
                     plugin.getConfigManager().chatFormatString,
-                    sender,
+                    source,
+                    viewerPlayer,
                     plugin,
                     plainMessage
             );
 
-            // Optional ping sound (per-viewer). Renderer can be called async -> schedule sync for sounds.
-            if (viewer instanceof Player target) {
-                if (!target.hasPermission("headschat.hidden") || target.isOp()) {
-                    if (plainMessage.contains(target.getName())) {
-                        Bukkit.getScheduler().runTask(plugin, () ->
-                                target.playSound(target.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1)
-                        );
-                    }
-                }
+            if (viewerPlayer != null && plainMessage.contains(viewerPlayer.getName())) {
+                viewerPlayer.playSound(
+                        viewerPlayer.getLocation(),
+                        plugin.getConfigManager().getMentionSound(),
+                        SoundCategory.MASTER, // or SoundCategory.PLAYERS, SoundCategory.RECORDS, etc.
+                        1.0f,                 // Volume
+                        1.0f                  // Pitch
+                );
             }
 
+            // Because the renderer is called for each person, this 'rendered' component
+            // will only have the yellow highlight for the person who was mentioned!
             return rendered;
         });
 

@@ -80,7 +80,9 @@ public final class HeadsChat extends JavaPlugin {
         getLogger().info("Loading config...");
         configManager = new ConfigManager(this);
         configManager.setup();
-        getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+        if (configManager.getConfig().getBoolean("chat.enabled")) {
+            getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+        }
         if (configManager.getConfig().getBoolean("join.enabled")) {
             getServer().getPluginManager().registerEvents(new JoinLeaveListener(this), this);
         }

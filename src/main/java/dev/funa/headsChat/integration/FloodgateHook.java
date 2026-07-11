@@ -1,17 +1,25 @@
 package dev.funa.headsChat.integration;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.geysermc.floodgate.api.FloodgateApi;
 
 public class FloodgateHook {
 
-    private static final FloodgateApi API = FloodgateApi.getInstance();
+    public static String parse(String prepared, Player sender, Player viewer, String fallbackChar) {
+        boolean isViewerBedrock = false;
 
-    public static String parse(String prepared, Player player, String fallbackChar) {
-        if (API.isFloodgatePlayer(player.getUniqueId())) {
+        // Safely check if Floodgate is enabled and if the viewer is actually a player
+        if (viewer != null && Bukkit.getPluginManager().isPluginEnabled("floodgate")) {
+            isViewerBedrock = FloodgateApi.getInstance().isFloodgatePlayer(viewer.getUniqueId());
+        }
+
+        // If the viewer is Bedrock OR if the viewer is the Console (null)
+        if (isViewerBedrock || viewer == null) {
             return prepared.replace("{head}", fallbackChar);
         } else {
-            return prepared.replace("{head}", "<head:" + player.getUniqueId() + ">");
+            // Java viewer: Keep the head tag of the SENDER
+            return prepared.replace("{head}", "<head:" + sender.getName() + ">");
         }
     }
 }

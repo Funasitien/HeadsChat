@@ -117,4 +117,8 @@ public class ConfigManager {
     public String  getBedrockCharFallback() {
         return bedrockFallbackString;
     }
+
+    public String getMentionSound() {
+        return config.getString("ping.sound", "minecraft:block.note_block.bell");
+    }
 }

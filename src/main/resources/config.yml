@@ -28,6 +28,10 @@ chat:
   cooldown-message: "<red>You are sending messages too quickly! Please wait {time} seconds."
   cooldown-bypass-permission: "headschat.bypass.cooldown"
 
+ping:
+  enabled: true
+  sound: "minecraft:block.note_block.bell"
+
 name-format:
   enabled: true
   dialog:

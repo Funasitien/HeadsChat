@@ -7,27 +7,51 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import java.util.regex.Pattern;
 
 public class Formatter {
 
-    public static Component parseText(String text, Player player, HeadsChat plugin) {
-        return parseText(text, player, plugin, null);
+    // Regex to match legacy colors (&0-&9, &a-&f, &k-&o, &r) case-insensitively
+    private static final Pattern LEGACY_PATTERN = Pattern.compile("&(?=[0-9a-fk-orA-FK-OR])");
+
+    public static Component parseText(String text, Player sender, Player viewer, HeadsChat plugin) {
+        return parseText(text, sender, viewer, plugin, null);
+    }
+
+    public static Component parseText(String text, Player sender, Player viewer, HeadsChat plugin, String message) {
+        // ONLY replace & if it precedes a valid legacy color character
+        String prepared = LEGACY_PATTERN.matcher(text).replaceAll("§")
+                .replace("{player}", sender.getPlayerListName())
+                .replace("{prefix}", VaultHook.getPrefix(sender))
+                .replace("{suffix}", VaultHook.getSuffix(sender));
+
+        String fallbackString = "";
+        prepared = FloodgateHook.parse(prepared, sender, viewer, fallbackString);
+
+        if (message != null) {
+            prepared = prepared.replace("{message}", message);
+        }
+
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            prepared = PlaceholderAPI.setPlaceholders(sender, prepared);
+        }
+
+        if (prepared.contains("§")) {
+            prepared = legacyToMiniMessage(prepared);
+        }
+
+        return plugin.getMiniMessage().deserialize(prepared);
     }
 
     public static Component parseText(String text, Player player, HeadsChat plugin, String message) {
-        String prepared = text
-                .replace("&", "§")
+        String prepared = LEGACY_PATTERN.matcher(text).replaceAll("§")
                 .replace("{player}", player.getPlayerListName())
                 .replace("{prefix}", VaultHook.getPrefix(player))
                 .replace("{suffix}", VaultHook.getSuffix(player));
 
-        if (plugin.isFloodgateEnabled()) {
-            prepared = FloodgateHook.parse(prepared, player, plugin.getConfigManager().getBedrockCharFallback());
-        } else {
-            prepared = prepared.replace("{head}", "<head:" + player.getName() + ">");
-        }
+        prepared = prepared.replace("{head}", "<head:" + player.getName() + ">");
 
-            if (message != null) {
+        if (message != null) {
             prepared = prepared.replace("{message}", message);
         }
 
@@ -88,5 +112,9 @@ public class Formatter {
         }
 
         return result.toString();
+    }
+
+    public static Component parseText(String msg, Player sender, HeadsChat plugin) {
+        return parseText(msg, sender, sender, plugin);
     }
 }

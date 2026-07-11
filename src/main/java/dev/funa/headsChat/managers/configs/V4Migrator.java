@@ -11,6 +11,9 @@ public class V4Migrator {
         YAML.createKeyIfNotExists(config, "motd.message", List.of("<white>Welcome to the server {head} {player}!", "<gray>Have fun!"));
 
         YAML.createKeyIfNotExists(config, "bedrock.fallback", "");
+        YAML.createKeyIfNotExists(config, "bedrock.enabled", true);
+        YAML.createKeyIfNotExists(config, "ping.enabled", true);
+        YAML.createKeyIfNotExists(config, "ping.sound", "minecraft:ENTITY_PLAYER_LEVELUP");
 
     }
 }

@@ -26,7 +26,7 @@ public class MessageCommand implements CommandExecutor, TabCompleter {
 
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (args.length == 0) {
-            Component reloaded = MiniMessage.miniMessage().deserialize(HeadsChat.prefix + "Configuration reloaded.");
+            Component reloaded = MiniMessage.miniMessage().deserialize(HeadsChat.prefix + "You need to specify a player to message or have a conversation started.");
             sender.sendMessage(reloaded);
             return true;
         }
